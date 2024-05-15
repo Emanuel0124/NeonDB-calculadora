@@ -82,4 +82,12 @@ def consultar_usuario(id_usuario):
         print(f"Error al consultar el usuario: {error}")
 
 # Llamada a la función para agregar usuario y liquidación con los valores obtenidos del primer código
+otros_ingresos = 0  
+ingresos_laborales = 0  
+retenciones_fuente = 0  
+seguridad_social = 0  
+aportes_pension = 0  
+gastos_creditos_hipotecarios = 0  
+donaciones = 0  
+gastos_educacion = 0  
 agregar_usuario_y_liquidacion(ingresos_laborales, otros_ingresos, retenciones_fuente, seguridad_social, aportes_pension, gastos_creditos_hipotecarios, donaciones, gastos_educacion)
