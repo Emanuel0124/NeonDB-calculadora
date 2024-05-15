@@ -23,7 +23,7 @@ def agregar_usuario(nombre, apellido, documento_identidad, correo_electronico, t
         conn = conectar_db()
         if conn:
             with conn.cursor() as cur:
-                sql = "INSERT INTO users (Nombre, Apellido, Documento_Identidad, Correo_Electronico, Telefono, Fecha_Ingreso, Fecha_Salida, Salario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO usuarios (Nombre, Apellido, Documento_Identidad, Correo_Electronico, Telefono, Fecha_Ingreso, Fecha_Salida, Salario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                 cur.execute(sql, (nombre, apellido, documento_identidad, correo_electronico, telefono, fecha_ingreso, fecha_salida, salario))
                 conn.commit()
             conn.close()
@@ -50,7 +50,7 @@ def consultar_usuario(id_usuario):
         if conn:
             with conn.cursor() as cur:
                 # Consultar datos del usuario
-                sql = "SELECT * FROM users WHERE ID_Usuario = %s"
+                sql = "SELECT * FROM userios WHERE ID_Usuario = %s"
                 cur.execute(sql, (id_usuario,))
                 usuario = cur.fetchone()
                 
@@ -93,7 +93,7 @@ def eliminar_usuario(id_usuario):
         conn = conectar_db()
         if conn:
             with conn.cursor() as cur:
-                sql = "DELETE FROM users WHERE ID_Usuario = %s"
+                sql = "DELETE FROM usuarios WHERE ID_Usuario = %s"
                 cur.execute(sql, (id_usuario,))
                 conn.commit()
             conn.close()

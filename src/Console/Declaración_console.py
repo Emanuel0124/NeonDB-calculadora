@@ -118,5 +118,5 @@ result = Logica.calcular_impuesto_renta(ingresos_laborales, otros_ingresos, rete
 
 """
 
-import os
+
 

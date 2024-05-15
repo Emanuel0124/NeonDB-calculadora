@@ -8,6 +8,7 @@ Este programa está diseñado para calcular el impuesto sobre la renta basado en
 
 Requisitos previos
 Python instalado en tu sistema. Puedes descargarlo desde python.org.
+instalar dependencias de psycopg2 con: pip install psycopg2
 Kivy instalado. Puedes instalarlo usando pip: pip install kivy.
 Pasos para ejecutar el programa:
 Descarga o clona el repositorio en tu máquina local con el comando: git clone Nombre del repositorio

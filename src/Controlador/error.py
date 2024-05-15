@@ -1,4 +1,4 @@
-from Controlador.controller import conectar_db
+from controller import conectar_db
 import psycopg2
 
 def handle_error(func):
