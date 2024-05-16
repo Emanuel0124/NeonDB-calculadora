@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 import psycopg2
 import database
 
-# Función para conectarse a la base de datos
+# Función para conectar a la base de datos
 def conectar_db():
     try:
         conn = psycopg2.connect(
@@ -15,33 +15,28 @@ def conectar_db():
         )
         return conn
     except (Exception, psycopg2.Error) as error:
-        return None  # No se imprime el mensaje de error para evitar problemas en las pruebas
+        return None
 
-# Función para agregar un nuevo usuario
-def agregar_usuario(nombre, apellido, documento_identidad, correo_electronico, telefono, fecha_ingreso, fecha_salida, salario):
+# Función para agregar un nuevo usuario con sus datos de ingresos
+def agregar_usuario_y_liquidacion(ingresos_laborales, otros_ingresos, retenciones_fuente, seguridad_social, aportes_pension, gastos_creditos_hipotecarios, donaciones, gastos_educacion):
     try:
         conn = conectar_db()
         if conn:
             with conn.cursor() as cur:
-                sql = "INSERT INTO usuarios (Nombre, Apellido, Documento_Identidad, Correo_Electronico, Telefono, Fecha_Ingreso, Fecha_Salida, Salario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-                cur.execute(sql, (nombre, apellido, documento_identidad, correo_electronico, telefono, fecha_ingreso, fecha_salida, salario))
-                conn.commit()
-            conn.close()
-    except (Exception, psycopg2.Error) as error:
-        print(f"Error al agregar el usuario: {error}")
+                # Agregar usuario
+                sql_usuario = "INSERT INTO usuarios (Nombre, Apellido, Documento_Identidad, Correo_Electronico, Telefono, Fecha_Ingreso, Fecha_Salida, Salario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING ID_Usuario"
+                cur.execute(sql_usuario, ('Nombre', 'Apellido', 'Documento', 'correo@ejemplo.com', '123456789', '2024-05-15', '2024-05-15', ingresos_laborales + otros_ingresos))
+                id_usuario = cur.fetchone()[0]
 
-# Función para agregar una nueva liquidación
-def agregar_liquidacion(indemnizacion, vacaciones, cesantias, intereses_sobre_cesantias, prima_servicios, retencion_fuente, total_a_pagar, id_usuario):
-    try:
-        conn = conectar_db()
-        if conn:
-            with conn.cursor() as cur:
-                sql = "INSERT INTO liquidacion (Indemnizacion, Vacaciones, Cesantias, Intereses_Sobre_Cesantias, Prima_Servicios, Retencion_Fuente, Total_A_Pagar, ID_Usuario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-                cur.execute(sql, (indemnizacion, vacaciones, cesantias, intereses_sobre_cesantias, prima_servicios, retencion_fuente, total_a_pagar, id_usuario))
+                # Agregar liquidación
+                sql_liquidacion = "INSERT INTO liquidacion (Indemnizacion, Vacaciones, Cesantias, Intereses_Sobre_Cesantias, Prima_Servicios, Retencion_Fuente, Total_A_Pagar, ID_Usuario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                cur.execute(sql_liquidacion, (0, 0, 0, 0, 0, retenciones_fuente, 0, id_usuario))
+
                 conn.commit()
             conn.close()
+            print("Usuario y liquidación agregados correctamente.")
     except (Exception, psycopg2.Error) as error:
-        print(f"Error al agregar la liquidación: {error}")
+        print(f"Error al agregar el usuario y la liquidación: {error}")
 
 # Función para consultar los datos de un usuario
 def consultar_usuario(id_usuario):
@@ -50,7 +45,7 @@ def consultar_usuario(id_usuario):
         if conn:
             with conn.cursor() as cur:
                 # Consultar datos del usuario
-                sql = "SELECT * FROM userios WHERE ID_Usuario = %s"
+                sql = "SELECT * FROM usuarios WHERE ID_Usuario = %s"
                 cur.execute(sql, (id_usuario,))
                 usuario = cur.fetchone()
                 
@@ -86,16 +81,13 @@ def consultar_usuario(id_usuario):
     except (Exception, psycopg2.Error) as error:
         print(f"Error al consultar el usuario: {error}")
 
-
-# Función para eliminar un usuario
-def eliminar_usuario(id_usuario):
-    try:
-        conn = conectar_db()
-        if conn:
-            with conn.cursor() as cur:
-                sql = "DELETE FROM usuarios WHERE ID_Usuario = %s"
-                cur.execute(sql, (id_usuario,))
-                conn.commit()
-            conn.close()
-    except (Exception, psycopg2.Error) as error:
-        print(f"Error al eliminar el usuario: {error}")
+# Llamada a la función para agregar usuario y liquidación con los valores obtenidos del primer código
+otros_ingresos = 0  
+ingresos_laborales = 0  
+retenciones_fuente = 0  
+seguridad_social = 0  
+aportes_pension = 0  
+gastos_creditos_hipotecarios = 0  
+donaciones = 0  
+gastos_educacion = 0  
+agregar_usuario_y_liquidacion(ingresos_laborales, otros_ingresos, retenciones_fuente, seguridad_social, aportes_pension, gastos_creditos_hipotecarios, donaciones, gastos_educacion)
